@@ -99,6 +99,7 @@ pub enum StreamCommands<T: AudioStream> {
 ///     audio.stream(SineStream { t: 0.0, note: 440.0, frequency: 44_000.0 });
 /// }
 /// ```
+#[derive(bevy::prelude::Resource)]
 pub struct StreamedAudio<T: AudioStream> {
     pub(crate) commands: RwLock<VecDeque<(StreamCommands<T>, AudioStreamChannel)>>,
 }

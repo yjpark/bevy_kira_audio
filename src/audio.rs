@@ -1,9 +1,10 @@
 use crate::audio_output::{play_audio_channel, update_instance_states};
 use crate::source::AudioSource;
-use crate::{AudioSystemLabel, ParallelSystemDescriptorCoercion};
+use crate::{AudioSystemLabel};
 use bevy::app::{App, CoreStage};
 use bevy::asset::Handle;
 use bevy::ecs::system::Resource;
+use bevy::prelude::IntoSystemDescriptor;
 use parking_lot::RwLock;
 use std::collections::{HashMap, VecDeque};
 use std::marker::PhantomData;
@@ -119,6 +120,7 @@ impl AudioApp for App {
 ///
 /// Add your own channels via [`add_audio_channel`](AudioApp::add_audio_channel).
 /// By default, there is only the [`AudioChannel<MainTrack>`](crate::Audio) channel.
+#[derive(bevy::prelude::Resource)]
 pub struct AudioChannel<T> {
     pub(crate) commands: RwLock<VecDeque<AudioCommand>>,
     pub(crate) states: HashMap<InstanceHandle, PlaybackState>,

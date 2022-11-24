@@ -35,6 +35,7 @@ pub use audio::{AudioApp, AudioChannel, InstanceHandle, PlaybackState};
 pub use channel::AudioStreamChannel;
 pub use source::AudioSource;
 pub use stream::{AudioStream, Frame, StreamedAudio};
+use bevy::prelude::IntoSystemDescriptor;
 
 mod audio;
 mod audio_output;
@@ -55,7 +56,7 @@ use crate::source::SettingsLoader;
 #[cfg(feature = "wav")]
 use crate::source::WavLoader;
 use bevy::prelude::{
-    AddAsset, App, CoreStage, ParallelSystemDescriptorCoercion, Plugin, SystemLabel,
+    AddAsset, App, CoreStage, Plugin, SystemLabel,
 };
 use std::marker::PhantomData;
 
@@ -131,6 +132,7 @@ pub type Audio = AudioChannel<MainTrack>;
 /// You can add your own channels via [`add_audio_channel`](audio::AudioApp::add_audio_channel).
 ///
 /// You can use [`Audio`] as a type alias for [`AudioChannel<MainTrack>`]
+#[derive(bevy::prelude::Resource)]
 pub struct MainTrack;
 
 /// A Bevy plugin for streaming of audio
