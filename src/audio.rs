@@ -1,10 +1,10 @@
 use crate::audio_output::{play_audio_channel, update_instance_states};
 use crate::source::AudioSource;
 use crate::{AudioSystemLabel};
-use bevy::app::{App, CoreSet};
+use bevy::app::{App, PreUpdate, PostUpdate};
+use bevy::prelude::{IntoSystemConfigs, IntoSystemSetConfigs}; 
 use bevy::asset::Handle;
 use bevy::ecs::system::Resource;
-use bevy::prelude::IntoSystemConfig;
 use parking_lot::RwLock;
 use std::collections::{HashMap, VecDeque};
 use std::marker::PhantomData;
@@ -107,11 +107,11 @@ pub trait AudioApp {
 
 impl AudioApp for App {
     fn add_audio_channel<T: Resource>(&mut self) -> &mut Self {
-        self.add_system(play_audio_channel::<T>.in_base_set(CoreSet::PostUpdate))
-            .add_system(
-                update_instance_states::<T>
-                    .in_base_set(CoreSet::PreUpdate)
-                    .after(AudioSystemLabel::InstanceCleanup),
+        self.add_systems(PostUpdate, play_audio_channel::<T>)
+            .add_systems(PreUpdate, (update_instance_states::<T>, )
+                .in_set(AudioSystemLabel::InstanceUpdate),)
+            .configure_sets(PreUpdate, 
+                (AudioSystemLabel::InstanceCleanup, AudioSystemLabel::InstanceUpdate).chain()
             )
             .insert_resource(AudioChannel::<T>::default())
     }

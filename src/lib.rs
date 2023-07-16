@@ -55,7 +55,7 @@ use crate::source::SettingsLoader;
 #[cfg(feature = "wav")]
 use crate::source::WavLoader;
 use bevy::prelude::{
-    AddAsset, App, CoreSet, Plugin, SystemSet, IntoSystemConfig,
+    AddAsset, App, PreUpdate, PostUpdate, Plugin, SystemSet, IntoSystemConfigs,
 };
 use std::marker::PhantomData;
 
@@ -106,9 +106,8 @@ impl Plugin for AudioPlugin {
         #[cfg(feature = "settings_loader")]
         app.init_asset_loader::<SettingsLoader>();
 
-        app.add_system(
-            cleanup_stopped_instances
-                .in_base_set(CoreSet::PreUpdate)
+        app.add_systems(PreUpdate,
+            (cleanup_stopped_instances, )
                 .in_set(AudioSystemLabel::InstanceCleanup),
         )
         .add_audio_channel::<MainTrack>();
@@ -117,6 +116,7 @@ impl Plugin for AudioPlugin {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, SystemSet)]
 pub(crate) enum AudioSystemLabel {
+    InstanceUpdate,
     InstanceCleanup,
 }
 
@@ -198,7 +198,7 @@ where
 {
     fn build(&self, app: &mut App) {
         app.init_resource::<StreamedAudio<T>>()
-            .add_system(stream_audio_system::<T>.in_base_set(CoreSet::PostUpdate));
+            .add_systems(PostUpdate, stream_audio_system::<T>);
     }
 }
 

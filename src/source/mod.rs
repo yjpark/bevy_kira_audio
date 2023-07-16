@@ -5,7 +5,7 @@ mod ogg_loader;
 mod settings_loader;
 mod wav_loader;
 
-use bevy::reflect::TypeUuid;
+use bevy::reflect::{TypeUuid, TypePath};
 use kira::sound::Sound;
 
 pub use flac_loader::FlacLoader;
@@ -16,7 +16,7 @@ pub use settings_loader::SettingsLoader;
 pub use wav_loader::WavLoader;
 
 /// A source of audio data
-#[derive(Debug, Clone, TypeUuid)]
+#[derive(Debug, Clone, TypeUuid, TypePath)]
 #[uuid = "6a9fc4ca-b5b5-94d6-613c-522e2d9fe86d"]
 pub struct AudioSource {
     /// The Kira sound making up this `AudioSource`
