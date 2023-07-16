@@ -23,7 +23,7 @@ wav = ["kira/wav"]
 
 [dependencies]
 # bevy
-bevy = { version = "0.10", default-features = false, features = ["bevy_asset"] }
+bevy = { version = "0.11", default-features = false, features = ["bevy_asset"] }
 # other
 anyhow = "1.0"
 kira = { version = "0.5.2", default-features = false }
